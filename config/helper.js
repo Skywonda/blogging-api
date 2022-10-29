@@ -1,4 +1,4 @@
-const argon2 = require('argon2')
+const argon2 = require("argon2")
 const jwt = require("jsonwebtoken")
 const config = require("./config")
 const userModel = require("../models/user")
@@ -32,7 +32,7 @@ async function validateUser(identity, password) {
 
 
 module.exports = {
-    // hashPassword,
+    hashPassword,
     generateToken,
     compareHash,
     validateUser

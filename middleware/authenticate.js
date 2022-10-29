@@ -4,6 +4,7 @@ const JwtStrategy = require("passport-jwt").Strategy
 
 const config = require("../config/config")
 const userModel = require("../models/user")
+const blogModel = require("../models/blog")
 
 var opts = {}
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken()
@@ -21,3 +22,21 @@ exports.jwtPassport = passport.use(new JwtStrategy(opts, async (payload, done) =
 }))
 
 exports.verifyUser = passport.authenticate('jwt', { session: false })
+
+exports.veriryPostOwner = async function (req, res, next) {
+    const post = await blogModel.findById(req.params.id).populate("author_id")
+    if (!post) {
+        return res.status(404).send("Post not found!")
+    }
+    const postOwnerId = post.author_id.id
+    const requesterId = req.user.id
+
+    if (postOwnerId == requesterId) {
+        return next()
+    }
+
+    res.status(401).json({
+        status: false,
+        msg: "You are not authorized!"
+    })
+}

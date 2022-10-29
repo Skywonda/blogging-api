@@ -2,16 +2,22 @@ const mongoose = require('mongoose')
 
 const blogSchema = mongoose.Schema({
     title: {
-        type: String
+        type: String,
+        required: true,
+        unique: true
     },
     description: {
         type: String
     },
     tags: {
+        type: [String]
+    },
+    author: {
         type: String
     },
-    read_cout: {
-        type: Number
+    read_count: {
+        type: Number,
+        default: 0
     },
     reading_time: {
         type: String

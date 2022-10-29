@@ -23,7 +23,7 @@ async function createUser(req, res) {
     if (userExist) {
         return res.status(409).send("This user already exist!")
     }
-    password = await hashPassword(password)
+    // password = await hashPassword(password)
     const user = await userModel.create({ firstname, lastname, username, email, password })
     res.status(201).json({
         msg: "user created!",
@@ -39,8 +39,32 @@ async function getAllUser(req, res) {
     })
 }
 
+async function updateUser(req, res) {
+    const { firstname, lastname } = req.body
+    const user = await userModel.findByIdAndUpdate(req.user.id, { firstname, lastname }, { new: true })
+    if (!user) {
+        return res.status(400).send("Can't update user!")
+    }
+    res.json({
+        msg: "Update successfull!",
+        user
+    })
+}
+
+async function deleteUser(req, res) {
+    const user = await userModel.findByIdAndDelete(req.user.id)
+    if (!user) {
+        return res.status(400).send("Can't delete user!")
+    }
+    res.send({
+        msg: "User deleted successfully!"
+    })
+}
+
 module.exports = {
     createUser,
     getAllUser,
-    loginUser
+    loginUser,
+    updateUser,
+    deleteUser
 }
