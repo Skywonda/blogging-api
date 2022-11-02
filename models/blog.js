@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 
-const blogSchema = mongoose.Schema({
+const Schema = mongoose.Schema
+const blogSchema = new Schema({
     title: {
         type: String,
         required: true,
@@ -20,13 +21,13 @@ const blogSchema = mongoose.Schema({
         default: 0
     },
     reading_time: {
-        type: String
+        type: Number
     },
     body: {
         type: String,
         required: true
     },
-    author_id: {
+    owner: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true
@@ -39,6 +40,18 @@ const blogSchema = mongoose.Schema({
 },
     { timestamps: true }
 )
+
+blogSchema.pre("save", async function (next) {
+    const blogCout = this.body.split(" ").length
+    const desCount = this.body.split(" ").length
+    const titleCount = this.body.split(" ").length
+
+    let readTime;
+    let sum = (blogCout + desCount + titleCount) / 200
+    sum < 1 ? readTime = 1 : readTime = Math.round(sum)
+    this.reading_time = readTime;
+    next()
+})
 
 const Blog = mongoose.model("Blog", blogSchema)
 module.exports = Blog

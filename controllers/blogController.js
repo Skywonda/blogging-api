@@ -2,8 +2,8 @@ const blogModel = require("../models/blog")
 
 async function addBlogPost(req, res) {
     const { title, description, tags, reading_time, body } = req.body
-    const author_id = await req.user.id
-    const blog = await blogModel.create({ title, description, tags, reading_time, body, author_id })
+    const owner = await req.user.id
+    const blog = await blogModel.create({ title, description, tags, reading_time, body, owner })
     if (!blog) {
         return res.send("An error occured while creating blog")
     }
@@ -39,7 +39,7 @@ async function getAllPublishedPost(req, res) {
             },
         ],
     },
-    ).limit(limit).skip(skip).sort({ [sort]: -1 })
+    ).skip(skip).limit(limit).sort({ [sort]: -1 })
     res.json({
         msg: "found!",
         posts
@@ -47,7 +47,7 @@ async function getAllPublishedPost(req, res) {
 }
 
 async function getOnePost(req, res) {
-    const post = await blogModel.findById(req.params.id)
+    const post = await blogModel.findById(req.params.id).populate("owner")
     if (!post) {
         return res.status(404).send("Post not found!")
     }
@@ -75,8 +75,8 @@ async function updatePostState(req, res) {
 }
 
 async function updatePost(req, res) {
-    const { title, description, body, tags, reading_time } = req.body
-    const post = await blogModel.findByIdAndUpdate(req.params.id, { title, description, body, tags, reading_time }, { new: true })
+    const { title, description, body, tags } = req.body
+    const post = await blogModel.findByIdAndUpdate(req.params.id, { title, description, body, tags }, { new: true })
     if (!post) {
         return res.status(404).send("Post to update not found")
     }
