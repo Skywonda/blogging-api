@@ -13,12 +13,6 @@ async function addBlogPost(req, res) {
     })
 }
 async function getAllPublishedPost(req, res) {
-    // const posts = await blogModel.find({ state: "published" })
-    // res.json({
-    //     msg: "All published post",
-    //     posts
-    // })
-    // { $and: [{ $or: [{ title: regex }, { description: regex }] }] }
     const limit = parseInt(req.query.limit) || 20
     const page = parseInt(req.query.page) || 0
     let sort = req.query.sort
@@ -93,7 +87,6 @@ async function deletePost(req, res) {
     }
     res.json({
         msg: "Deleted successfully!",
-        post
     })
 }
 
@@ -107,7 +100,7 @@ async function listAuthorPost(req, res) {
     const posts = await blogModel.aggregate([
         {
             $match: {
-                author_id: req.user._id,
+                owner: req.user._id,
                 state: state
             },
         },

@@ -1,9 +1,9 @@
-const app = require("../../app")
-const { dbConnect, dbDisconnect, dbCleanUP } = require("./db.utils")
+const app = require("../app")
+const { dbConnect, dbDisconnect, dbCleanUP } = require("./test-utils/db.utils")
 const request = require("supertest")
 
-const userModel = require("../../models/user")
-const postModel = require("../../models/blog")
+const userModel = require("../models/user")
+const postModel = require("../models/blog")
 
 const user = {
     firstname: "Ade",
@@ -29,8 +29,9 @@ describe('Test post routes', () => {
 
     beforeAll(async () => {
         dbConnect()
+    })
 
-
+    beforeEach(async () => {
         const createdUser = await userModel.create(user)
         owner = createdUser.id
 
@@ -57,6 +58,7 @@ describe('Test post routes', () => {
         expect(response.status).toBe(201)
         expect(response.body).toHaveProperty("blog")
         expect(response.body.blog).toHaveProperty("reading_time", 1)
+        expect(response.body.blog).toHaveProperty("state", "draft")
     })
 
 
@@ -80,5 +82,36 @@ describe('Test post routes', () => {
         expect(response.status).toBe(200)
         expect(response.body).toHaveProperty("post")
         expect(response.body.post).toHaveProperty("owner")
+        expect(response.body.post.owner).toHaveProperty("username")
+    })
+
+    it('should update post state', async () => {
+        post_data.owner = owner
+        const post = await postModel.create(post_data)
+        const response = await request(app).put(`/blogs/state/${post.id}`)
+            .set('authorization', `Bearer ${token}`)
+            .send({ state: 'published' })
+
+        expect(response.status).toBe(200)
+        expect(response.body.post).toHaveProperty("state", "published")
+    })
+
+    it('should update post body', async () => {
+        post_data.owner = owner
+        const post = await postModel.create(post_data)
+        const response = await request(app).put(`/blogs/${post.id}`)
+            .set('authorization', `Bearer ${token}`)
+            .send({ title: 'updated title' })
+        expect(response.status).toBe(200)
+        expect(response.body.post.title).toBe("updated title")
+    })
+
+    it('should delete a post', async () => {
+        post_data.owner = owner
+        const post = await postModel.create(post_data)
+        const response = await request(app).delete(`/blogs/${post.id}`)
+            .set('authorization', `Bearer ${token}`)
+        expect(response.status).toBe(200)
     })
 })
+
