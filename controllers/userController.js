@@ -5,7 +5,7 @@ async function loginUser(req, res) {
     const { identity, password } = req.body
     const user = await validateUser(identity, password)
     if (!user) {
-        return res.status(401).send("Invalid Credentials")
+        return res.status(401).json("Invalid Credentials")
     }
     const token = await generateToken({ id: user.id })
     res.json({
