@@ -10,7 +10,8 @@ async function loginUser(req, res) {
     const token = await generateToken({ id: user.id })
     res.json({
         msg: "Login successful!",
-        token
+        token,
+        userid: user.id
     })
 }
 
