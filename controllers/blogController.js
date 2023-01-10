@@ -1,9 +1,9 @@
 const blogModel = require("../models/blog")
 
 async function addBlogPost(req, res) {
-    const { title, description, tags, reading_time, body } = req.body
+    const { title, description, tags, reading_time, body, image } = req.body
     const owner = await req.user.id
-    const blog = await blogModel.create({ title, description, tags, reading_time, body, owner })
+    const blog = await blogModel.create({ title, description, tags, reading_time, body, owner, image })
     if (!blog) {
         return res.send("An error occured while creating blog")
     }

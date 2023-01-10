@@ -27,6 +27,12 @@ const blogSchema = new Schema({
         type: String,
         required: true
     },
+    image: [
+        {
+            type: String,
+            required: false
+        }
+    ],
     owner: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
