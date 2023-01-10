@@ -30,7 +30,8 @@ const blogSchema = new Schema({
     image: [
         {
             type: String,
-            required: false
+            required: false,
+            default: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTazRa-UljlJ57z2tqmSNSz5X_C5RkD1S-Nfj46b_ZO&s'
         }
     ],
     owner: {
