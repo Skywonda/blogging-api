@@ -15,6 +15,18 @@ async function loginUser(req, res) {
     })
 }
 
+async function checkAuth(req, res) {
+    if (!req.user) {
+        return res.json({
+            msg: 'you are not authenticated!'
+        })
+    }
+    res.json({
+        msg: 'You are authenticated',
+        userId: req.user.id
+    })
+}
+
 async function createUser(req, res) {
     let { firstname, lastname, username, email, password } = req.body
     let userExist = await userModel.findOne({ username })
@@ -66,6 +78,7 @@ module.exports = {
     createUser,
     getAllUser,
     loginUser,
+    checkAuth,
     updateUser,
     deleteUser
 }
