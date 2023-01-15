@@ -11,3 +11,5 @@ commentRouter
 commentRouter
     .route('/:id')
     .get(authenticate.verifyUser, getComment)
+
+module.exports = commentRouter;

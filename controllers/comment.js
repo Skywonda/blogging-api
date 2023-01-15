@@ -10,7 +10,7 @@ async function createComment(req, res) {
         })
     }
     const userId = req.user.id
-    const comment = await commentModel.create({ author: userId, content, postId: post })
+    const comment = await commentModel.create({ author: userId, content, postId })
     res.status(201).json({
         msg: 'Comment created successfully!',
         comment
@@ -19,7 +19,7 @@ async function createComment(req, res) {
 
 async function getComment(req, res) {
     const commentId = req.params.id
-    const comment = await commentModel.findById(commentId)
+    const comment = await commentModel.findById(commentId).populate('author').populate('postId')
     if (!comment) {
         return res.json({
             msg: 'This comment does not exist'
