@@ -4,9 +4,9 @@ const categoryModel = require("../models/category")
 async function addBlogPost(req, res) {
     const { title, description, tags, reading_time, body, image, category } = req.body
     const owner = await req.user.id
-    const categoryExist = await categoryModel.findOne({ name: category })
-    if (!categoryExist) return res.status(400).json({ msg: 'Category is not valid' })
-    const blog = await blogModel.create({ title, description, tags, reading_time, body, category, owner, image })
+    // const categoryExist = await categoryModel.findOne({ name: category })
+    // if (!categoryExist) return res.status(400).json({ msg: 'Category is not valid' })
+    const blog = await blogModel.create({ title, description, tags, reading_time, body, owner, image })
     if (!blog) {
         return res.send("An error occured while creating blog")
     }
