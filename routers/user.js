@@ -10,7 +10,8 @@ const {
     loginUser,
     checkAuth,
     updateUser,
-    deleteUser
+    deleteUser,
+    getProfile
 } = require('../controllers/userController')
 
 userRouter
@@ -28,6 +29,10 @@ userRouter
 userRouter
     .route("/checkAuth")
     .get(authenticate.verifyUser, checkAuth)
+
+userRouter
+    .route('/profile/:id')
+    .get(getProfile)
 
 userRouter
     .route("/:id")

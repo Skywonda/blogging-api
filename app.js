@@ -4,10 +4,12 @@ const blogRouter = require("./routers/blog")
 const commentRouter = require("./routers/comment")
 const categoryRouter = require("./routers/category")
 const cors = require("cors")
+const morgan = require("morgan")
 
 
 const app = express()
 app.use(express.json())
+app.use(morgan('dev'))
 
 app.use(cors())
 app.use("/users", userRouter)
