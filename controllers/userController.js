@@ -1,5 +1,5 @@
 const userModel = require("../models/user");
-const blogModel = require('../models/blog')
+const blogModel = require("../models/blog");
 const {
     hashPassword,
     validateUser,
@@ -33,7 +33,8 @@ async function checkAuth(req, res) {
 }
 
 async function createUser(req, res) {
-    let { firstname, lastname, username, email, password } = req.body;
+    let { firstname, lastname, username, email, password, bio, profileImage, job } =
+        req.body;
     let userExist = await userModel.findOne({ username });
     if (!userExist) {
         userExist = await userModel.findOne({ email });
@@ -48,6 +49,9 @@ async function createUser(req, res) {
         username,
         email,
         password,
+        bio,
+        profileImage,
+        job
     });
     res.status(201).json({
         msg: "user created!",
@@ -64,19 +68,19 @@ async function getAllUser(req, res) {
 }
 
 async function getProfile(req, res) {
-    const { id } = req.params
+    const { id } = req.params;
     const [user, posts] = await Promise.all([
         userModel.findById(id),
-        blogModel.find({ owner: id })
-    ])
+        blogModel.find({ owner: id }),
+    ]);
     res.json({ msg: "user profile", user, posts });
 }
 
 async function updateUser(req, res) {
-    const { firstname, lastname } = req.body;
+    const { firstname, lastname, profileImage, bio, job } = req.body;
     const user = await userModel.findByIdAndUpdate(
         req.user.id,
-        { firstname, lastname },
+        { firstname, lastname, profileImage, bio, job },
         { new: true }
     );
     if (!user) {

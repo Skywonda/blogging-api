@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 
 const Schema = mongoose.Schema
+
 const blogSchema = new Schema({
     title: {
         type: String,
@@ -26,6 +27,13 @@ const blogSchema = new Schema({
     body: {
         type: String,
         required: true
+    },
+    category: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Category'
+    },
+    coverImage: {
+        type: String
     },
     image: [
         {
