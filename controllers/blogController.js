@@ -57,7 +57,7 @@ async function getAllPublishedPost(req, res) {
         .skip(skip)
         .limit(limit)
         .sort({ [sort]: -1 })
-        .populate({ path: "owner", select: "firstname" });
+        .populate({ path: "owner", select: "firstname lastname username" });
     res.json({
         msg: "found!",
         posts,
