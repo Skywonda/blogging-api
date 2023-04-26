@@ -14,8 +14,8 @@ async function addBlogPost(req, res) {
         coverImage,
     } = req.body;
     const owner = await req.user.id;
-    // const categoryExist = await categoryModel.findOne({ name: category })
-    // if (!categoryExist) return res.status(400).json({ msg: 'Category is not valid' })
+    const categoryExist = await categoryModel.findOne({ name: category })
+    if (!categoryExist) return res.status(400).json({ msg: 'Category is not valid' })
     const blog = await blogModel.create({
         title,
         description,
@@ -25,7 +25,7 @@ async function addBlogPost(req, res) {
         owner,
         image,
         coverImage,
-        category,
+        category: category.id,
     });
     if (!blog) {
         return res.send("An error occured while creating blog");
