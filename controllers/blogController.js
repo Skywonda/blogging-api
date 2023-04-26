@@ -1,5 +1,6 @@
 const blogModel = require("../models/blog");
 const categoryModel = require("../models/category");
+const commentModel = require("../models/comment");
 
 async function addBlogPost(req, res) {
     const {
@@ -65,7 +66,10 @@ async function getAllPublishedPost(req, res) {
 }
 
 async function getOnePost(req, res) {
-    const post = await blogModel.findById(req.params.id).populate("owner");
+    const [post, comment] = await Promise.all([
+        blogModel.findById(req.params.id).populate("owner"),
+        commentModel.find({ postId: req.params.id }),
+    ]);
     if (!post) {
         return res.status(404).send("Post not found!");
     }
@@ -74,6 +78,7 @@ async function getOnePost(req, res) {
     res.json({
         msg: "A single post",
         post,
+        comment,
     });
 }
 
@@ -96,11 +101,12 @@ async function updatePostState(req, res) {
     });
 }
 
+
 async function updatePost(req, res) {
     const { title, description, body, tags } = req.body;
     const post = await blogModel.findByIdAndUpdate(
         req.params.id,
-        { title, description, body, tags },
+        { title, description, body, tags, image },
         { new: true }
     );
     if (!post) {

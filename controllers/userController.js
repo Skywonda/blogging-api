@@ -36,9 +36,10 @@ async function createUser(req, res) {
     let { firstname, lastname, username, email, password, bio, profileImage, job } =
         req.body;
     let userExist = await userModel.findOne({ username });
-    if (!userExist) {
-        userExist = await userModel.findOne({ email });
+    if (userExist) {
+        return res.status(409).send("Username already exist!")
     }
+    userExist = await userModel.findOne({ email });
     if (userExist) {
         return res.status(409).send("This user already exist!");
     }
