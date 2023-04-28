@@ -14,7 +14,7 @@ async function addBlogPost(req, res) {
         coverImage,
     } = req.body;
     const owner = await req.user.id;
-    const categoryExist = await categoryModel.findOne({ name: category })
+    const categoryExist = await categoryModel.findOne({ name: category });
     // if (!categoryExist) return res.status(400).json({ msg: 'Category is not valid' })
     const blog = await blogModel.create({
         title,
@@ -68,7 +68,9 @@ async function getAllPublishedPost(req, res) {
 async function getOnePost(req, res) {
     const [post, comment] = await Promise.all([
         blogModel.findById(req.params.id).populate("owner"),
-        commentModel.find({ postId: req.params.id }),
+        commentModel
+            .find({ postId: req.params.id })
+            .populate({ path: "author", select: "username" }),
     ]);
     if (!post) {
         return res.status(404).send("Post not found!");
@@ -100,7 +102,6 @@ async function updatePostState(req, res) {
         post,
     });
 }
-
 
 async function updatePost(req, res) {
     const { title, description, body, tags } = req.body;
