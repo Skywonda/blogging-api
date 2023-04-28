@@ -70,7 +70,7 @@ async function getOnePost(req, res) {
         blogModel.findById(req.params.id).populate("owner"),
         commentModel
             .find({ postId: req.params.id })
-            .populate({ path: "author", select: "username" }),
+            .populate({ path: "author", select: "username profileImage" }),
     ]);
     if (!post) {
         return res.status(404).send("Post not found!");
