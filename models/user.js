@@ -45,6 +45,16 @@ const userSchema = new Schema(
                 },
             },
         ],
+        socialHandle: [
+            {
+                name: {
+                    type: String,
+                },
+                url: {
+                    type: String,
+                },
+            },
+        ],
     },
     { timestamps: true }
 );

@@ -42,6 +42,7 @@ async function createUser(req, res) {
         bio,
         profileImage,
         job,
+        socialHandle
     } = req.body;
     let userExist = await userModel.findOne({ username });
     if (userExist) {
@@ -61,6 +62,7 @@ async function createUser(req, res) {
         bio,
         profileImage,
         job,
+        socialHandle
     });
     res.status(201).json({
         msg: "user created!",
@@ -86,12 +88,12 @@ async function getProfile(req, res) {
 }
 
 async function updateUser(req, res) {
-    const { firstname, lastname, profileImage, bio, job } = req.body;
+    const { firstname, lastname, profileImage, bio, job, socialHandle } = req.body;
     if (!req.user.id === req.params.id)
         return res.status(401).json({ msg: "information disatch" });
     const user = await userModel.findByIdAndUpdate(
         req.user.id,
-        { firstname, lastname, profileImage, bio, job },
+        { firstname, lastname, profileImage, bio, job, socialHandle },
         { new: true }
     );
     if (!user) {
