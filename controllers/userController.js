@@ -33,11 +33,19 @@ async function checkAuth(req, res) {
 }
 
 async function createUser(req, res) {
-    let { firstname, lastname, username, email, password, bio, profileImage, job } =
-        req.body;
+    let {
+        firstname,
+        lastname,
+        username,
+        email,
+        password,
+        bio,
+        profileImage,
+        job,
+    } = req.body;
     let userExist = await userModel.findOne({ username });
     if (userExist) {
-        return res.status(409).send("Username already exist!")
+        return res.status(409).send("Username already exist!");
     }
     userExist = await userModel.findOne({ email });
     if (userExist) {
@@ -52,7 +60,7 @@ async function createUser(req, res) {
         password,
         bio,
         profileImage,
-        job
+        job,
     });
     res.status(201).json({
         msg: "user created!",
@@ -79,6 +87,8 @@ async function getProfile(req, res) {
 
 async function updateUser(req, res) {
     const { firstname, lastname, profileImage, bio, job } = req.body;
+    if (!req.user.id === req.params.id)
+        return res.status(401).json({ msg: "information disatch" });
     const user = await userModel.findByIdAndUpdate(
         req.user.id,
         { firstname, lastname, profileImage, bio, job },
@@ -94,6 +104,8 @@ async function updateUser(req, res) {
 }
 
 async function deleteUser(req, res) {
+    if (!req.user.id === req.params.id)
+        return res.status(401).json({ msg: "information disatch" });
     const user = await userModel.findByIdAndDelete(req.user.id);
     if (!user) {
         return res.status(400).send("Can't delete user!");

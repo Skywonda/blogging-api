@@ -18,8 +18,6 @@ userRouter
     .route("/")
     .get(getAllUser)
     .post(validateUser(), validate, createUser)
-    .put(authenticate.verifyUser, updateUser)
-    .delete(authenticate.verifyUser, deleteUser)
 
 
 userRouter
@@ -36,5 +34,7 @@ userRouter
 
 userRouter
     .route("/:id")
+    .put(authenticate.verifyUser, updateUser)
+    .delete(authenticate.verifyUser, deleteUser)
 
 module.exports = userRouter
