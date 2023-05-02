@@ -104,7 +104,7 @@ async function updatePostState(req, res) {
 }
 
 async function updatePost(req, res) {
-    const { title, description, body, tags } = req.body;
+    const { title, description, body, tags, image } = req.body;
     const post = await blogModel.findByIdAndUpdate(
         req.params.id,
         { title, description, body, tags, image },
