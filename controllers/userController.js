@@ -17,6 +17,7 @@ async function loginUser(req, res) {
         msg: "Login successful!",
         token,
         userid: user.id,
+        profileImage: user.profileImage
     });
 }
 
