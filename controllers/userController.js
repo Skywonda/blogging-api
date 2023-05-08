@@ -13,11 +13,12 @@ async function loginUser(req, res) {
         return res.status(401).json("Invalid Credentials");
     }
     const token = await generateToken({ id: user.id });
+    const data = user.toJSON()
+    delete data.password
     res.json({
         msg: "Login successful!",
         token,
-        userid: user.id,
-        profileImage: user.profileImage
+        data
     });
 }
 
