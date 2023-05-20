@@ -8,6 +8,7 @@ const userRouter = require("./routers/user");
 const blogRouter = require("./routers/blog");
 const commentRouter = require("./routers/comment");
 const categoryRouter = require("./routers/category");
+const bookmarkRouter = require("./routers/bookmark");
 
 const errorHandler = require("./middleware/errorHandler");
 
@@ -26,6 +27,7 @@ app.use("/users", userRouter);
 app.use("/blogs", blogRouter);
 app.use("/comment", commentRouter);
 app.use("/category", categoryRouter);
+app.use("/bookmark", bookmarkRouter)
 
 app.use((req, res) => console.log("ghalaglahg"));
 

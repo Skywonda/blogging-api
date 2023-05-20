@@ -12,8 +12,6 @@ const {
     listAuthorPost,
     likePost,
     dislikePost,
-    addPostToBookmark,
-    removePostFromBookmark,
 } = require("../controllers/blog");
 
 blogRouter.route("/").post(verifyUser, addBlogPost);
@@ -25,8 +23,6 @@ blogRouter.route("/author").get(verifyUser, listAuthorPost);
 blogRouter.route("/like").post(verifyUser, likePost);
 blogRouter.route("/dislike").post(verifyUser, dislikePost);
 
-blogRouter.route("/bookmark").post(verifyUser, addPostToBookmark);
-blogRouter.route("/remove-bookmark").post(verifyUser, removePostFromBookmark);
 
 blogRouter
     .route("/:id")
