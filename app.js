@@ -9,6 +9,7 @@ const blogRouter = require("./routers/blog");
 const commentRouter = require("./routers/comment");
 const categoryRouter = require("./routers/category");
 const bookmarkRouter = require("./routers/bookmark");
+const authRouter = require("./routers/auth");
 
 const errorHandler = require("./middleware/errorHandler");
 
@@ -23,6 +24,7 @@ app.get("/", (req, res) => {
     res.send("hello everyone");
 });
 
+app.use("/auth", authRouter)
 app.use("/users", userRouter);
 app.use("/blogs", blogRouter);
 app.use("/comment", commentRouter);

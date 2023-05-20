@@ -6,33 +6,6 @@ const {
     generateToken,
 } = require("../config/helper");
 
-async function loginUser(req, res) {
-    const { identity, password } = req.body;
-    const user = await validateUser(identity, password);
-    if (!user) {
-        return res.status(401).json("Invalid Credentials");
-    }
-    const token = await generateToken({ id: user.id });
-    const data = user.toJSON()
-    delete data.password
-    res.cookie('jwt_token', token).json({
-        msg: "Login successful!",
-        token,
-        data
-    });
-}
-
-async function checkAuth(req, res) {
-    if (!req.user) {
-        return res.json({
-            msg: "you are not authenticated!",
-        });
-    }
-    res.json({
-        msg: "You are authenticated",
-        userId: req.user.id,
-    });
-}
 
 async function createUser(req, res) {
     let {
@@ -123,8 +96,6 @@ module.exports = {
     createUser,
     getAllUser,
     getProfile,
-    loginUser,
-    checkAuth,
     updateUser,
     deleteUser,
 };

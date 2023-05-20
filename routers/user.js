@@ -21,14 +21,6 @@ userRouter
 
 
 userRouter
-    .route("/login")
-    .post(loginUser)
-
-userRouter
-    .route("/checkAuth")
-    .get(authenticate.verifyUser, checkAuth)
-
-userRouter
     .route('/profile/:id')
     .get(getProfile)
 
