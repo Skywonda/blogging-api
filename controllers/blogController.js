@@ -1,6 +1,9 @@
+const { NotFoundError, BadRequestError } = require("../errors/errors");
+const Blog = require("../models/blog");
 const blogModel = require("../models/blog");
 const categoryModel = require("../models/category");
 const commentModel = require("../models/comment");
+const Like = require("../models/like");
 
 async function addBlogPost(req, res) {
     const {
@@ -58,7 +61,10 @@ async function getAllPublishedPost(req, res) {
         .skip(skip)
         .limit(limit)
         .sort({ [sort]: -1 })
-        .populate({ path: "owner", select: "firstname lastname username profileImage" });
+        .populate({
+            path: "owner",
+            select: "firstname lastname username profileImage",
+        });
     res.json({
         msg: "found!",
         posts,
@@ -155,6 +161,35 @@ async function listAuthorPost(req, res) {
     });
 }
 
+async function likePost(req, res) {
+    const { postId } = req.body;
+    const user = req.user;
+    const post = await Blog.findById(postId);
+    if (!post) throw new NotFoundError("Post not found!");
+
+    const likeExist = await Like.findOne({ post: post.id, user: user.id });
+    if (likeExist) throw new BadRequestError("You've already like this post!");
+    const like = await Like.create({ user: user.id, post: post.id })
+    res.json({
+        msg: 'post liked',
+        like
+    })
+}
+
+async function dislikePost(req, res) {
+    const { postId } = req.body;
+    const user = req.user;
+    const post = await Blog.findById(postId);
+    if (!post) throw new NotFoundError("Post not found!");
+
+    const likeExist = await Like.findOne({ post: post.id, user: user.id });
+    if (!likeExist) throw new BadRequestError("You haven't liked this post!");
+    await likeExist.delete()
+    res.status(204).json({
+        msg: 'post disliked!',
+    })
+}
+
 module.exports = {
     addBlogPost,
     getAllPublishedPost,
@@ -163,4 +198,6 @@ module.exports = {
     updatePost,
     deletePost,
     listAuthorPost,
+    likePost,
+    dislikePost
 };

@@ -1,6 +1,6 @@
 const express = require("express")
 const blogRouter = express.Router()
-const authenticate = require("../middleware/authenticate")
+const { verifyUser, verifyPostOwner } = require("../middleware/authenticate")
 
 
 
@@ -11,12 +11,14 @@ const {
     updatePostState,
     updatePost,
     deletePost,
-    listAuthorPost
+    listAuthorPost,
+    likePost,
+    dislikePost
 } = require("../controllers/blogController")
 
 blogRouter
     .route("/")
-    .post(authenticate.verifyUser, addBlogPost)
+    .post(verifyUser, addBlogPost)
 
 
 
@@ -26,18 +28,22 @@ blogRouter
 
 blogRouter
     .route("/author")
-    .get(authenticate.verifyUser, listAuthorPost)
+    .get(verifyUser, listAuthorPost)
+
+blogRouter.route("/like").post(verifyUser, likePost)
+blogRouter.route("/dislike").post(verifyUser, dislikePost)
+
 
 blogRouter
     .route("/:id")
     .get(getOnePost)
-    .put(authenticate.verifyUser, authenticate.veriryPostOwner, updatePost)
-    .delete(authenticate.verifyUser, authenticate.veriryPostOwner, deletePost)
+    .put(verifyUser, verifyPostOwner, updatePost)
+    .delete(verifyUser, verifyPostOwner, deletePost)
 
 
 blogRouter
     .route("/state/:id")
-    .put(authenticate.verifyUser, authenticate.veriryPostOwner, updatePostState)
+    .put(verifyUser, verifyPostOwner, updatePostState)
 
 
 module.exports = blogRouter

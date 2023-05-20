@@ -15,7 +15,7 @@ async function loginUser(req, res) {
     const token = await generateToken({ id: user.id });
     const data = user.toJSON()
     delete data.password
-    res.json({
+    res.cookie('jwt_token', token).json({
         msg: "Login successful!",
         token,
         data
