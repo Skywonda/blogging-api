@@ -1,8 +1,6 @@
-const express = require("express")
-const blogRouter = express.Router()
-const { verifyUser, verifyPostOwner } = require("../middleware/authenticate")
-
-
+const express = require("express");
+const blogRouter = express.Router();
+const { verifyUser, verifyPostOwner } = require("../middleware/authenticate");
 
 const {
     addBlogPost,
@@ -13,37 +11,31 @@ const {
     deletePost,
     listAuthorPost,
     likePost,
-    dislikePost
-} = require("../controllers/blogController")
+    dislikePost,
+    addPostToBookmark,
+    removePostFromBookmark,
+} = require("../controllers/blog");
 
-blogRouter
-    .route("/")
-    .post(verifyUser, addBlogPost)
+blogRouter.route("/").post(verifyUser, addBlogPost);
 
+blogRouter.route("/").get(getAllPublishedPost);
 
+blogRouter.route("/author").get(verifyUser, listAuthorPost);
 
-blogRouter
-    .route("/")
-    .get(getAllPublishedPost)
+blogRouter.route("/like").post(verifyUser, likePost);
+blogRouter.route("/dislike").post(verifyUser, dislikePost);
 
-blogRouter
-    .route("/author")
-    .get(verifyUser, listAuthorPost)
-
-blogRouter.route("/like").post(verifyUser, likePost)
-blogRouter.route("/dislike").post(verifyUser, dislikePost)
-
+blogRouter.route("/bookmark").post(verifyUser, addPostToBookmark);
+blogRouter.route("/remove-bookmark").post(verifyUser, removePostFromBookmark);
 
 blogRouter
     .route("/:id")
     .get(getOnePost)
     .put(verifyUser, verifyPostOwner, updatePost)
-    .delete(verifyUser, verifyPostOwner, deletePost)
-
+    .delete(verifyUser, verifyPostOwner, deletePost);
 
 blogRouter
     .route("/state/:id")
-    .put(verifyUser, verifyPostOwner, updatePostState)
+    .put(verifyUser, verifyPostOwner, updatePostState);
 
-
-module.exports = blogRouter
+module.exports = blogRouter;

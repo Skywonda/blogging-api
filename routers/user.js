@@ -12,7 +12,7 @@ const {
     updateUser,
     deleteUser,
     getProfile
-} = require('../controllers/userController')
+} = require('../controllers/user')
 
 userRouter
     .route("/")

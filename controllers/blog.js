@@ -4,6 +4,7 @@ const blogModel = require("../models/blog");
 const categoryModel = require("../models/category");
 const commentModel = require("../models/comment");
 const Like = require("../models/like");
+const Bookmark = require('../models/bookmark')
 
 async function addBlogPost(req, res) {
     const {
@@ -190,6 +191,35 @@ async function dislikePost(req, res) {
     })
 }
 
+async function addPostToBookmark(req, res) {
+    const { postId } = req.body;
+    const user = req.user;
+    const post = await Blog.findById(postId);
+    if (!post) throw new NotFoundError("Post not found!");
+
+    const bookmarkExist = await Bookmark.findOne({ post: post.id, user: user.id });
+    if (bookmarkExist) throw new BadRequestError("You've already added this post to bookmark!");
+    const bookmark = await Bookmark.create({ user: user.id, post: post.id })
+    res.json({
+        msg: 'post bookmarked!',
+        bookmark
+    })
+}
+
+async function removePostFromBookmark(req, res) {
+    const { postId } = req.body;
+    const user = req.user;
+    const post = await Blog.findById(postId);
+    if (!post) throw new NotFoundError("Post not found!");
+
+    const bookmarkExist = await Bookmark.findOne({ post: post.id, user: user.id });
+    if (!bookmarkExist) throw new BadRequestError("You haven't added this post to bookmark!");
+    await bookmarkExist.delete()
+    res.status(204).json({
+        msg: 'post removed from bookmark!',
+    })
+}
+
 module.exports = {
     addBlogPost,
     getAllPublishedPost,
@@ -199,5 +229,7 @@ module.exports = {
     deletePost,
     listAuthorPost,
     likePost,
-    dislikePost
+    dislikePost,
+    addPostToBookmark,
+    removePostFromBookmark
 };
