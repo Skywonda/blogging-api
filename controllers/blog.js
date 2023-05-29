@@ -73,7 +73,7 @@ async function getAllPublishedPost(req, res) {
 
 async function getOnePost(req, res) {
     const postId = req.params.id
-    const [post, comments, likes] = await Promise.all([
+    const [post, comment, likes] = await Promise.all([
         blogModel.findById(req.params.id).populate("owner"),
         commentModel
             .find({ postId })
@@ -88,7 +88,7 @@ async function getOnePost(req, res) {
     res.json({
         msg: "A single post",
         post,
-        comments,
+        comment,
         likes
     });
 }
