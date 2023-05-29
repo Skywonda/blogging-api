@@ -73,21 +73,21 @@ async function getAllPublishedPost(req, res) {
 
 async function getOnePost(req, res) {
     const postId = req.params.id
-    const [posts, comments, likes] = await Promise.all([
+    const [post, comments, likes] = await Promise.all([
         blogModel.findById(req.params.id).populate("owner"),
         commentModel
             .find({ postId })
             .populate({ path: "author", select: "username profileImage" }),
         Like.find({ post: postId }).populate({ path: "user", select: "username profileImage" })
     ]);
-    if (!posts) {
+    if (!post) {
         return res.status(404).send("Post not found!");
     }
-    posts.read_count += 1;
-    await posts.save();
+    post.read_count += 1;
+    await post.save();
     res.json({
         msg: "A single post",
-        posts,
+        post,
         comments,
         likes
     });
