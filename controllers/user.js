@@ -1,11 +1,5 @@
 const userModel = require("../models/user");
 const blogModel = require("../models/blog");
-const {
-    hashPassword,
-    validateUser,
-    generateToken,
-} = require("../config/helper");
-
 
 async function createUser(req, res) {
     let {

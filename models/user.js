@@ -23,9 +23,12 @@ const userSchema = new Schema(
             required: true,
             unique: true,
         },
+        authProvider: {
+            type: String,
+            enum: ['google']
+        },
         password: {
             type: String,
-            required: true,
             select: false,
         },
         profileImage: {

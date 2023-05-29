@@ -12,7 +12,7 @@ async function compareHash(plainPassword, hashedPassword) {
 }
 
 async function generateToken(payload) {
-    return jwt.sign(payload, config.secret, { expiresIn: 3600 })
+    return jwt.sign(payload, config.secret, { expiresIn: '24hr' })
 }
 
 async function validateUser(identity, password) {
